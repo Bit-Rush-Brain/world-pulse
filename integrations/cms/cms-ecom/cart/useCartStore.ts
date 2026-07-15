@@ -66,7 +66,7 @@ interface CartActions {
 type CartStore = CartState & { actions: CartActions };
 
 /** Check if error is a Wix "not found" error */
-const isCartNotFoundError = (error: unknown): boolean => {
+export const isCartNotFoundError = (error: unknown): boolean => {
   if (!error || typeof error !== 'object') return false;
   const err = error as { details?: { applicationError?: { code?: string } }; message?: string };
   return err.details?.applicationError?.code === 'CART_NOT_FOUND' || err.details?.applicationError?.code === 'OWNED_CART_NOT_FOUND' ||
@@ -74,7 +74,7 @@ const isCartNotFoundError = (error: unknown): boolean => {
 };
 
 /** Convert Wix cart line item to our CartItem format */
-const mapLineItemToCartItem = (lineItem: currentCart.LineItem): CartItem | null => {
+export const mapLineItemToCartItem = (lineItem: currentCart.LineItem): CartItem | null => {
   if (!lineItem._id || !lineItem.catalogReference) return null;
 
   const { catalogReference, quantity, productName, price, image } = lineItem;
@@ -93,7 +93,7 @@ const mapLineItemToCartItem = (lineItem: currentCart.LineItem): CartItem | null 
 };
 
 /** Convert Wix cart to our items format */
-const mapCartToItems = (cart: currentCart.Cart | null | undefined): CartItem[] => {
+export const mapCartToItems = (cart: currentCart.Cart | null | undefined): CartItem[] => {
   if (!cart?.lineItems) return [];
   return cart.lineItems
     .map(mapLineItemToCartItem)
